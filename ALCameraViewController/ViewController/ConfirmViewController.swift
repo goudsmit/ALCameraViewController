@@ -27,6 +27,7 @@ public class ConfirmViewController: UIViewController {
 	
     var croppingParameters: CroppingParameters {
         didSet {
+            cropOverlay.isSquarable = croppingParameters.squarableCrop
             cropOverlay.isResizable = croppingParameters.allowResizing
             cropOverlay.minimumSize = croppingParameters.minimumSize
         }
@@ -107,6 +108,16 @@ public class ConfirmViewController: UIViewController {
 		super.viewDidLoad()
 
 		view.backgroundColor = UIColor.black
+		
+		scrollView.addSubview(imageView)
+		scrollView.delegate = self
+		scrollView.maximumZoomScale = 1
+		
+        cropOverlay.isHidden = true
+        cropOverlay.isResizable = croppingParameters.allowResizing
+        cropOverlay.isMovable = croppingParameters.allowMoving
+        cropOverlay.isSquarable = croppingParameters.squarableCrop
+        cropOverlay.minimumSize = croppingParameters.minimumSize
 
         loadScrollView()
         loadCropOverlay()

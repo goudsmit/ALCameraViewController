@@ -33,7 +33,7 @@ internal class CropOverlay: UIView {
     private var outterGap: CGFloat {
         return cornerButtonWidth * self.outterGapRatio
     }
-
+    var isSquarable: Bool = false
     var isResizable: Bool = false
     var isMovable: Bool = false
     var minimumSize: CGSize = CGSize.zero
@@ -55,6 +55,56 @@ internal class CropOverlay: UIView {
         super.init(coder: aDecoder)
         setup()
     }
+	
+	func createButton() -> UIButton {
+		let button = UIButton()
+		button.backgroundColor = UIColor.clear
+		
+		let dragGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(moveCropOverlay))
+		button.addGestureRecognizer(dragGestureRecognizer)
+
+		addSubview(button)
+		return button
+	}
+	
+	@objc func moveCropOverlay(gestureRecognizer: UIPanGestureRecognizer) {
+		if isResizable, let button = gestureRecognizer.view as? UIButton {
+			if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+				let translation = gestureRecognizer.translation(in: self)
+				
+				var newFrame: CGRect
+				
+				switch button {
+				case cornerButtons[0]:	// Top Left
+                    newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y + translation.y, width: frame.size.width - translation.x, height: frame.size.height - translation.y)
+				case cornerButtons[1]:	// Top Right
+					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y + translation.y, width: frame.size.width + translation.x, height: frame.size.height - translation.y)
+				case cornerButtons[2]:	// Bottom Left
+					newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y, width: frame.size.width - translation.x, height: frame.size.height + translation.y)
+				case cornerButtons[3]:	// Bottom Right
+					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + translation.x, height: frame.size.height + translation.y)
+				default:
+					newFrame = CGRect.zero
+				}
+
+                var minimumFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y, width: max(newFrame.size.width, minimumSize.width + 2 * outterGap), height: max(newFrame.size.height, minimumSize.height + 2 * outterGap))
+                if isSquarable {
+                    minimumFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y, width: max(minimumFrame.size.height, minimumFrame.size.width), height: max(minimumFrame.size.height, minimumFrame.size.width))
+                }
+				frame = minimumFrame
+				layoutSubviews()
+
+				gestureRecognizer.setTranslation(CGPoint.zero, in: self)
+			}
+		} else if isMovable {
+			if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+				let translation = gestureRecognizer.translation(in: self)
+				
+				gestureRecognizer.view!.center = CGPoint(x: gestureRecognizer.view!.center.x + translation.x, y: gestureRecognizer.view!.center.y + translation.y)
+				gestureRecognizer.setTranslation(CGPoint(x: 0, y: 0), in: self)
+			}
+		}
+	}
 
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let view = super.hitTest(point, with: event)
