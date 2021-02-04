@@ -6,7 +6,7 @@ Pod::Spec.new do |spec|
   spec.requires_arc       = true
   spec.platform           = :ios, "9.0"
   spec.license            = "MIT"
-  spec.source_files       = "ALCameraViewController/**/*.{swift}"
+  spec.source_files       = "Sources/**/*.{swift}"
   spec.resources          = ["ALCameraViewController/ViewController/ConfirmViewController.xib", "ALCameraViewController/CameraViewAssets.xcassets", "ALCameraViewController/CameraView.strings"]
   spec.homepage           = "https://github.com/AlexLittlejohn/ALCameraViewController.git"
   spec.author             = { "Alex Littlejohn" => "alexlittlejohn@me.com", "Guillaume Bellut" => "guillaume@bellut.com" }
