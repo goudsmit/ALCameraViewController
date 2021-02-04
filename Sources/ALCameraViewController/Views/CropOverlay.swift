@@ -75,13 +75,13 @@ internal class CropOverlay: UIView {
 				var newFrame: CGRect
 				
 				switch button {
-				case cornerButtons[0]:	// Top Left
+				case buttons[0]:	// Top Left
                     newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y + translation.y, width: frame.size.width - translation.x, height: frame.size.height - translation.y)
-				case cornerButtons[1]:	// Top Right
+				case buttons[1]:	// Top Right
 					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y + translation.y, width: frame.size.width + translation.x, height: frame.size.height - translation.y)
-				case cornerButtons[2]:	// Bottom Left
+				case buttons[2]:	// Bottom Left
 					newFrame = CGRect(x: frame.origin.x + translation.x, y: frame.origin.y, width: frame.size.width - translation.x, height: frame.size.height + translation.y)
-				case cornerButtons[3]:	// Bottom Right
+				case buttons[3]:	// Bottom Right
 					newFrame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.size.width + translation.x, height: frame.size.height + translation.y)
 				default:
 					newFrame = CGRect.zero
